@@ -1,0 +1,87 @@
+---
+title: "dottable homework"
+author: "Gabriela C. Lebron & Alasya Zeweldi"
+date: "2025-03-04"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(data.table)
+```
+
+# Go to GitHub and download the data nycdata.csv and then answer the following questions.
+
+```{r}
+library(RCurl)
+x <- getURL("https://raw.githubusercontent.com/semiyarih/DATA613/refs/heads/main/dottable/nycdata.csv")
+flights <- read.csv(text = x)
+flights.data <- data.table(flights)
+head(flights, 6)
+```
+
+
+## 1.Use and show data.table code to select the variables year, month, day, and hour from the imported flights data
+
+```{r}
+flights.data[, .(year, month, day, hour)]
+```
+
+
+## 2. Use and show data.table code to produce a table that shows a carrier of DL, an origin of JFK and a destination of SEA
+
+```{r}
+flights.data[carrier == "DL" & origin == "JFK" & dest == "SEA"]
+```
+
+
+## 3. Use and show data.table code to produce a table that shows a carrier of UA, a month of March, and an airtime that is below 330.
+
+```{r}
+flights.data[carrier == "UA" & month == 3 & air_time < 330]
+```
+
+## 4. Use and show tidyverse code to produce a table that shows a carrier of UA, a month of March, and an airtime that is below 330.
+
+```{r}
+flights %>% 
+  filter(carrier == "UA" & month == 3 & air_time < 330) %>% 
+  head(6)
+```
+
+## 5. Use the data.table method to add a variable called speed that is the average air speed of the plane in miles per hour.
+
+```{r}
+flights.data[,speed := distance/hour]
+head(flights.data)
+```
+
+## 6. Use the tidyverse method to add a variable called speed that is the average air speed of the plane in miles per hour.
+
+```{r}
+flights %>% 
+  mutate(speed = distance/hour) %>% 
+  head(6)
+```
+
+## 7. Show and use coding to change the carrier abbreviation of UA to UniitedAir,
+
+### a. data.table method
+
+```{r}
+flights.data[carrier == "UA", carrier := "UniitedAir"]
+unique(flights.data$carrier)
+```
+
+### b. tidyverse method (Use a sequence of dplyr commands so that you can see the change in your table)
+
+```{r}
+flights %>%
+  mutate(carrier = ifelse(carrier == "UA", "UniitedAir", carrier)) %>% 
+  filter(carrier == "UniitedAir") %>% 
+  head(6)
+
+```
+
