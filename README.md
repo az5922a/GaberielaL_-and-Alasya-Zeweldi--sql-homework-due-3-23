@@ -1,1 +1,1 @@
-# GaberielaL_Alasya-Zeweldi-dottable-homework
+# GaberielaL and Alasya-Zeweldi-SQl-homework
